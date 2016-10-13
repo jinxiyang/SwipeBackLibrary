@@ -1,12 +1,13 @@
 package com.yang.swipeback.library;
 
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -60,9 +61,11 @@ public class SwipeBackLayout extends FrameLayout {
     private int mScrimColor = DEFAULT_SCRIM_COLOR;
 
     private ViewDragHelper mViewDragHelper;
+
     private Drawable mShadowLeft;
 
     private boolean mInLayout;
+
     private View mContentView;
 
     /**
@@ -85,11 +88,9 @@ public class SwipeBackLayout extends FrameLayout {
 
     private Rect mTmpRect = new Rect();
 
-    private SwipeBackActivity mActivity;
+    private FragmentActivity mActivity;
 
-    private SwipeBackFragment mFragment;
-
-    private SwipeBackFragment mPreFragment;
+    private Fragment mFragment;
 
 
     /**
@@ -193,18 +194,8 @@ public class SwipeBackLayout extends FrameLayout {
         return mContentView;
     }
 
-    public void setFragment(SwipeBackFragment fragment, View view) {
-        this.mFragment = fragment;
-        setContentView(view);
-    }
 
-    public void hiddenFragment() {
-        if (mPreFragment != null && mPreFragment.getView() != null) {
-            mPreFragment.getView().setVisibility(GONE);
-        }
-    }
-
-    public void attachToActivity(SwipeBackActivity activity) {
+    public void attachToActivity(SwipeBackActivityImpl activity) {
         mActivity = activity;
         TypedArray a = activity.getTheme().obtainStyledAttributes(new int[]{
                 android.R.attr.windowBackground
@@ -221,61 +212,10 @@ public class SwipeBackLayout extends FrameLayout {
         decor.addView(this);
     }
 
-    public void attachToFragment(SwipeBackFragment swipeBackFragment, View view) {
+    public void attachToFragment(Fragment fragment, View view) {
         addView(view);
-        setFragment(swipeBackFragment, view);
-    }
-
-    /**
-     * 启动进入动画
-     */
-    public void startEnterAnim() {
-        if (mContentView != null) {
-            ObjectAnimator anim = ObjectAnimator
-                    .ofFloat(mContentView, "TranslationX", mContentView.getTranslationX(), 0f);
-
-            anim.setDuration((long) (125 * mScrimOpacity));
-
-            mEnterAnim = anim;
-            mEnterAnim.start();
-        }
-    }
-
-    /**
-     * 回复界面的平移到初始位置
-     */
-    public void recovery() {
-        if (mEnterAnim != null && mEnterAnim.isRunning()) {
-            mEnterAnim.end();
-        } else {
-            mContentView.setTranslationX(0);
-        }
-    }
-
-    /**
-     * 背景Activity开始进入动画
-     */
-    private void startAnimOfBackgroundActivity() {
-        Activity activity = mActivity.getPreActivity();
-        if (activity instanceof SwipeBackActivity) {
-            enterAnimRunning = true;
-            SwipeBackLayout swipeBackLayout = ((SwipeBackActivity) activity).getSwipeBackLayout();
-            swipeBackLayout.startEnterAnim();
-        }
-    }
-
-    /**
-     * 移动背景Activity
-     */
-    private void moveBackgroundActivity() {
-        Activity activity = mActivity.getPreActivity();
-        if (activity instanceof SwipeBackActivity) {
-            View view = ((SwipeBackActivity) activity).getSwipeBackLayout().getContentView();
-            if (view != null) {
-                int width = view.getWidth();
-                view.setTranslationX(-width * 0.3f * Math.max(0f, mScrimOpacity - 0.15f));
-            }
-        }
+        mFragment = fragment;
+        setContentView(view);
     }
 
 
@@ -324,6 +264,52 @@ public class SwipeBackLayout extends FrameLayout {
         return true;
     }
 
+    /**
+     * 启动进入动画
+     * 此方法用于将背景view 完全移到屏幕中
+     */
+    public void startEnterAnim() {
+        if (mContentView != null) {
+            ObjectAnimator anim = ObjectAnimator
+                    .ofFloat(mContentView, "TranslationX", mContentView.getTranslationX(), 0f);
+
+            anim.setDuration((long) (125 * mScrimOpacity));
+
+            mEnterAnim = anim;
+            mEnterAnim.start();
+        }
+    }
+
+    /**
+     * 回复界面的平移到初始位置
+     */
+    public void recovery() {
+        if (mEnterAnim != null && mEnterAnim.isRunning()) {
+            mEnterAnim.end();
+        } else {
+            mContentView.setTranslationX(0);
+        }
+    }
+
+    /**
+     * 背景开始进入动画
+     */
+    private void startAnimOfBackgroundLayout(SwipeBackLayout layout) {
+        if (layout != null){
+            enterAnimRunning = true;
+            layout.startEnterAnim();
+        }
+    }
+
+    /**
+     * 移动背景
+     */
+    private void moveBackgroundLayout(SwipeBackLayout layout) {
+        if (layout != null){
+            int width = layout.getWidth();
+            layout.setTranslationX(-width * 0.3f * Math.max(0f, mScrimOpacity - 0.15f));
+        }
+    }
 
     private class ViewDragCallback extends ViewDragHelper.Callback {
 
@@ -336,13 +322,12 @@ public class SwipeBackLayout extends FrameLayout {
                         listener.onEdgeTouch(ViewDragHelper.EDGE_LEFT);
                     }
                 }
-
-                if (mFragment != null) {
-                    if (mPreFragment == null) {
-                        mPreFragment = (SwipeBackFragment) mFragment.getPrefragment();
+                if (mFragment != null) {//当前view在fragment中,将上一个fragment设置为透明可见
+                    Fragment preFragment = ((ISwipeBackFragment) mFragment).getPreFragment();
+                    if (preFragment != null && preFragment.getView() != null && preFragment.getView().getVisibility() != VISIBLE){
+                        preFragment.getView().setVisibility(VISIBLE);
                     }
-                    mPreFragment.getView().setVisibility(VISIBLE);
-                } else if (mActivity != null) {
+                } else if (mActivity != null) {//当前view在activity中,将此activity转为背景透明,则上一个activity将可见
                     Utils.convertActivityToTranslucent(mActivity);
                 }
             }
@@ -353,8 +338,11 @@ public class SwipeBackLayout extends FrameLayout {
         public int getViewHorizontalDragRange(View child) {
             if (mFragment != null) {
                 return 1;
-            } else if (mActivity != null && mActivity.swipeBackPriority()) {
-                return 1;
+            } else if (mActivity != null) {
+                ISwipeBackActivity swipeBackActivity = (ISwipeBackActivity)mActivity;
+                if (swipeBackActivity.swipeBackPriority()){
+                    return 1;
+                }
             }
             return 0;
         }
@@ -372,9 +360,10 @@ public class SwipeBackLayout extends FrameLayout {
         @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
-
-
             if (changedView == mContentView) {
+                //mContentView.getWidth() 实际是屏幕宽度
+                //mShadowLeft.getIntrinsicWidth() 阴影的宽度
+                //mContentView.getWidth() + mShadowLeft.getIntrinsicWidth()  需要把阴影也拖拽出屏幕,所以总宽度是阴影的宽度加上屏幕的宽度
                 mScrollPercent = Math.abs((float) left
                         / (mContentView.getWidth() + mShadowLeft.getIntrinsicWidth()));
 
@@ -382,13 +371,23 @@ public class SwipeBackLayout extends FrameLayout {
 
                 //未执行动画就平移
                 if (!enterAnimRunning) {
-                    moveBackgroundActivity();
+                    moveBackgroundLayout(getPreSwipeBackLayout());
                 }
 
                 invalidate();
 
-                if (mScrollPercent >= 1 && !mActivity.isFinishing()) {
-                    mActivity.finish();
+                if (mScrollPercent >= 1){
+                    if (mFragment != null && !mFragment.isDetached()){
+                        ISwipeBackFragment iSwipeBackFragment = (ISwipeBackFragment)mFragment;
+                        iSwipeBackFragment.setLockable(true);
+                        mFragment.getFragmentManager().popBackStackImmediate();
+                        iSwipeBackFragment.setLockable(false);
+
+                        ((ISwipeBackFragment)(iSwipeBackFragment.getPreFragment())).setLockable(false);
+                    }else if (mActivity != null && !mActivity.isFinishing()){
+                        mActivity.finish();
+                    }
+
                 }
             }
         }
@@ -400,9 +399,11 @@ public class SwipeBackLayout extends FrameLayout {
             if (xvel > DEFAULT_VELOCITY_THRESHOLD || mScrollPercent > DEFAULT_SCROLL_THRESHOLD) {
                 left = childWidth + mShadowLeft.getIntrinsicWidth();
                 mViewDragHelper.settleCapturedViewAt(left, top);
+
                 if (mScrimOpacity < 0.85f) {
-                    startAnimOfBackgroundActivity();
+                    startAnimOfBackgroundLayout(getPreSwipeBackLayout());
                 }
+
             } else {
                 left = 0;
                 mViewDragHelper.settleCapturedViewAt(left, top);
@@ -419,6 +420,18 @@ public class SwipeBackLayout extends FrameLayout {
                 }
             }
         }
+    }
+
+    private SwipeBackLayout getPreSwipeBackLayout() {
+        SwipeBackLayout swipeBackLayout = null;
+        if (mFragment != null) {
+            Fragment preFragment = ((ISwipeBackFragment) mFragment).getPreFragment();
+            swipeBackLayout = ((ISwipeBackFragment) preFragment).getSwipeBackLayout();
+        }else {
+            FragmentActivity preActivity = ((ISwipeBackActivity) mActivity).getPreActivity();
+            swipeBackLayout = ((ISwipeBackActivity) preActivity).getSwipeBackLayout();
+        }
+        return swipeBackLayout;
     }
 
 

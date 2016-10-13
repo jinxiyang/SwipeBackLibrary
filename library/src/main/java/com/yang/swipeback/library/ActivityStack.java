@@ -16,7 +16,7 @@ public class ActivityStack implements Application.ActivityLifecycleCallbacks {
         return ourInstance;
     }
 
-    private ActivityStack() {
+    public ActivityStack() {
     }
 
     public Activity getTopActivity() {
