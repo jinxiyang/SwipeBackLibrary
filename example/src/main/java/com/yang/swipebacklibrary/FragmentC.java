@@ -13,10 +13,10 @@ import com.yang.swipeback.library.SwipeBackFragmentImpl;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Fragment_3 extends SwipeBackFragmentImpl {
+public class FragmentC extends SwipeBackFragmentImpl {
 
 
-    public Fragment_3() {
+    public FragmentC() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class Fragment_3 extends SwipeBackFragmentImpl {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_3, container, false);
+        View view = inflater.inflate(R.layout.fragment_c, container, false);
         return attachToSwipeBack(view);
     }
 

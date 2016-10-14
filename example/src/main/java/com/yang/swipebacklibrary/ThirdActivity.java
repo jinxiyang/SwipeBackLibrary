@@ -1,10 +1,10 @@
 package com.yang.swipebacklibrary;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import com.yang.swipeback.library.ISwipeBackActivity;
 import com.yang.swipeback.library.SwipeBackActivityImpl;
 
 public class ThirdActivity extends SwipeBackActivityImpl {
@@ -14,7 +14,7 @@ public class ThirdActivity extends SwipeBackActivityImpl {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
 
-        loadNewFragment(new Fragment_1());
+        loadNewFragment(new FragmentA());
     }
 
     public void loadNewFragment(Fragment fragment) {
@@ -36,8 +36,8 @@ public class ThirdActivity extends SwipeBackActivityImpl {
     }
 
     @Override
-    public FragmentActivity getPreActivity() {
-        return (FragmentActivity) AppApplication.getInstance().getStack().getBackActivity();
+    public ISwipeBackActivity getPreActivity() {
+        return (ISwipeBackActivity) AppApplication.getInstance().getStack().getBackActivity();
     }
 
 }

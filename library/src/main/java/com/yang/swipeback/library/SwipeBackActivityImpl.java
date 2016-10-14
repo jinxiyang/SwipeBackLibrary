@@ -5,16 +5,19 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 /**
  * Created by yangjinxi on 2016/10/13.
  */
 
-public class SwipeBackActivityImpl extends AppCompatActivity implements ISwipeBackActivity{
+public class SwipeBackActivityImpl extends AppCompatActivity implements ISwipeBackActivity {
 
 
     private SwipeBackLayout mSwipeBackLayout;
@@ -47,11 +50,9 @@ public class SwipeBackActivityImpl extends AppCompatActivity implements ISwipeBa
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus)
-    {
+    public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(hasFocus)
-        {
+        if (hasFocus) {
             getSwipeBackLayout().recovery();
         }
     }
@@ -62,13 +63,17 @@ public class SwipeBackActivityImpl extends AppCompatActivity implements ISwipeBa
     }
 
     @Override
-    public FragmentActivity getPreActivity() {
-        return (FragmentActivity) ActivityStack.getInstance().getBackActivity();
+    public ISwipeBackActivity getPreActivity() {
+        return (ISwipeBackActivity) (ActivityStack.getInstance().getBackActivity());
     }
 
     @Override
     public boolean swipeBackPriority() {
-        return getSupportFragmentManager().getBackStackEntryCount() <= 1;
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments != null && fragments.size() > 1){
+            return false;
+        }
+        return true;
     }
 
     @Override

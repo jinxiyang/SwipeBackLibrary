@@ -10,7 +10,7 @@ public interface ISwipeBackActivity {
 
     SwipeBackLayout getSwipeBackLayout();
 
-    FragmentActivity getPreActivity();
+    ISwipeBackActivity getPreActivity();
 
 
     /**

@@ -1,11 +1,11 @@
 package com.yang.swipebacklibrary;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
+import com.yang.swipeback.library.ISwipeBackActivity;
 import com.yang.swipeback.library.SwipeBackActivityImpl;
 
 public class SecondActivity extends SwipeBackActivityImpl {
@@ -23,7 +23,7 @@ public class SecondActivity extends SwipeBackActivityImpl {
     }
 
     @Override
-    public FragmentActivity getPreActivity() {
-        return (FragmentActivity) AppApplication.getInstance().getStack().getBackActivity();
+    public ISwipeBackActivity getPreActivity() {
+        return (ISwipeBackActivity) AppApplication.getInstance().getStack().getBackActivity();
     }
 }

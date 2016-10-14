@@ -1,7 +1,5 @@
 package com.yang.swipeback.library;
 
-import android.support.v4.app.Fragment;
-
 /**
  * Created by yang on 2016/10/13.
  */
@@ -9,7 +7,7 @@ import android.support.v4.app.Fragment;
 public interface ISwipeBackFragment {
     SwipeBackLayout getSwipeBackLayout();
 
-    Fragment getPreFragment();
+    ISwipeBackFragment getPreFragment();
 
     boolean isLocking();
 

@@ -46,7 +46,7 @@ public class SwipeBackFragmentImpl extends Fragment implements ISwipeBackFragmen
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) {
-            Fragment preFragment = getPreFragment();
+            Fragment preFragment = (Fragment) getPreFragment();
             if (preFragment != null && preFragment.getView() != null){
                 preFragment.getView().setVisibility(View.GONE);
             }
@@ -83,7 +83,7 @@ public class SwipeBackFragmentImpl extends Fragment implements ISwipeBackFragmen
 
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        if (mLocking) {
+        if (isLocking()) {
             return mNoAnim;
         }
         return super.onCreateAnimation(transit, enter, nextAnim);
@@ -106,7 +106,7 @@ public class SwipeBackFragmentImpl extends Fragment implements ISwipeBackFragmen
     }
 
     @Override
-    public Fragment getPreFragment() {
+    public ISwipeBackFragment getPreFragment() {
         Fragment mPreFragment = null;
         List<Fragment> fragments = getFragmentManager().getFragments();
         if (fragments != null && fragments.size() > 1) {
@@ -119,7 +119,7 @@ public class SwipeBackFragmentImpl extends Fragment implements ISwipeBackFragmen
                 }
             }
         }
-        return mPreFragment;
+        return (ISwipeBackFragment) mPreFragment;
     }
 
     @Override

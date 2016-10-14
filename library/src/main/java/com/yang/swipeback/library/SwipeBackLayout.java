@@ -323,7 +323,8 @@ public class SwipeBackLayout extends FrameLayout {
                     }
                 }
                 if (mFragment != null) {//当前view在fragment中,将上一个fragment设置为透明可见
-                    Fragment preFragment = ((ISwipeBackFragment) mFragment).getPreFragment();
+                    ISwipeBackFragment iSwipeBackFragment = ((ISwipeBackFragment) mFragment).getPreFragment();
+                    Fragment preFragment = (Fragment) iSwipeBackFragment;
                     if (preFragment != null && preFragment.getView() != null && preFragment.getView().getVisibility() != VISIBLE){
                         preFragment.getView().setVisibility(VISIBLE);
                     }
@@ -419,17 +420,21 @@ public class SwipeBackLayout extends FrameLayout {
                     listener.onDragStateChange(state);
                 }
             }
+
+            if (state == ViewDragHelper.STATE_IDLE && mScrollPercent < 1f) {
+                Utils.convertActivotyFromTranslucent(mActivity);
+            }
         }
     }
 
     private SwipeBackLayout getPreSwipeBackLayout() {
         SwipeBackLayout swipeBackLayout = null;
         if (mFragment != null) {
-            Fragment preFragment = ((ISwipeBackFragment) mFragment).getPreFragment();
-            swipeBackLayout = ((ISwipeBackFragment) preFragment).getSwipeBackLayout();
+            ISwipeBackFragment preFragment = ((ISwipeBackFragment) mFragment).getPreFragment();
+            swipeBackLayout =  preFragment.getSwipeBackLayout();
         }else {
-            FragmentActivity preActivity = ((ISwipeBackActivity) mActivity).getPreActivity();
-            swipeBackLayout = ((ISwipeBackActivity) preActivity).getSwipeBackLayout();
+            ISwipeBackActivity preActivity = ((ISwipeBackActivity) mActivity).getPreActivity();
+            swipeBackLayout = preActivity.getSwipeBackLayout();
         }
         return swipeBackLayout;
     }
