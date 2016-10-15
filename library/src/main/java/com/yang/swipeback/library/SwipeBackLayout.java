@@ -1,6 +1,5 @@
 package com.yang.swipeback.library;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -25,24 +24,6 @@ import java.util.List;
  */
 
 public class SwipeBackLayout extends FrameLayout {
-    /**
-     * A view is not currently being dragged or animating as a result of a
-     * fling/snap.
-     */
-    public static final int STATE_IDLE = ViewDragHelper.STATE_IDLE;
-
-    /**
-     * A view is currently being dragged. The position is currently changing as
-     * a result of user input or simulated user input.
-     */
-    public static final int STATE_DRAGGING = ViewDragHelper.STATE_DRAGGING;
-
-    /**
-     * A view is currently settling into place as a result of a fling or
-     * predefined non-interactive motion.
-     */
-    public static final int STATE_SETTLING = ViewDragHelper.STATE_SETTLING;
-
 
     /**
      * 滑动销毁距离界限
@@ -86,22 +67,21 @@ public class SwipeBackLayout extends FrameLayout {
 
     private boolean mEnable = true;
 
+    /**
+     * 拖动当前布局时,上一个布局是否一起滚动
+     */
+    private boolean mPreLayoutScrollable = true;
+
+    /**
+     * 拖动当前布局时,左侧是否有阴影
+     */
+    private boolean mHasShadow = true;
+
     private Rect mTmpRect = new Rect();
 
     private FragmentActivity mActivity;
 
     private Fragment mFragment;
-
-
-    /**
-     * 判断背景Activity是否启动进入动画
-     */
-    private boolean enterAnimRunning = false;
-
-    /**
-     * 进入动画(只在释放手指时使用)
-     */
-    private ObjectAnimator mEnterAnim;
 
     /**
      * The set of listeners to be sent events through.
@@ -124,7 +104,19 @@ public class SwipeBackLayout extends FrameLayout {
     private void init(Context context) {
         mViewDragHelper = ViewDragHelper.create(this, new ViewDragCallback());
         mViewDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_LEFT);
-        mShadowLeft = ContextCompat.getDrawable(context, R.drawable.swipeback_shadow_left);
+        setHasShadow(true);
+        setPreLayoutScrollable(true);
+    }
+
+    public void setHasShadow(boolean hasShadow) {
+        mHasShadow = hasShadow;
+        if (hasShadow){
+            mShadowLeft = ContextCompat.getDrawable(getContext(), R.drawable.swipeback_shadow_left);
+        }
+    }
+
+    public void setPreLayoutScrollable(boolean scrollable) {
+        this.mPreLayoutScrollable = scrollable;
     }
 
     @Override
@@ -152,7 +144,7 @@ public class SwipeBackLayout extends FrameLayout {
         boolean ret = super.drawChild(canvas, child, drawingTime);
         if (mScrimOpacity > 0 && drawContent
                 && mViewDragHelper.getViewDragState() != ViewDragHelper.STATE_IDLE) {
-            drawShadow(canvas, child);
+            if (mHasShadow) drawShadow(canvas, child);
             drawScrim(canvas, child);
         }
         return ret;
@@ -189,11 +181,6 @@ public class SwipeBackLayout extends FrameLayout {
     private void setContentView(View view) {
         mContentView = view;
     }
-
-    public View getContentView() {
-        return mContentView;
-    }
-
 
     public void attachToActivity(SwipeBackActivityImpl activity) {
         mActivity = activity;
@@ -265,49 +252,17 @@ public class SwipeBackLayout extends FrameLayout {
     }
 
     /**
-     * 启动进入动画
-     * 此方法用于将背景view 完全移到屏幕中
-     */
-    public void startEnterAnim() {
-        if (mContentView != null) {
-            ObjectAnimator anim = ObjectAnimator
-                    .ofFloat(mContentView, "TranslationX", mContentView.getTranslationX(), 0f);
-
-            anim.setDuration((long) (125 * mScrimOpacity));
-
-            mEnterAnim = anim;
-            mEnterAnim.start();
-        }
-    }
-
-    /**
-     * 回复界面的平移到初始位置
-     */
-    public void recovery() {
-        if (mEnterAnim != null && mEnterAnim.isRunning()) {
-            mEnterAnim.end();
-        } else {
-            mContentView.setTranslationX(0);
-        }
-    }
-
-    /**
-     * 背景开始进入动画
-     */
-    private void startAnimOfBackgroundLayout(SwipeBackLayout layout) {
-        if (layout != null){
-            enterAnimRunning = true;
-            layout.startEnterAnim();
-        }
-    }
-
-    /**
      * 移动背景
      */
     private void moveBackgroundLayout(SwipeBackLayout layout) {
+        //mScrollPercent 变化时: 0 -> 0.95 -> 1
+        //背景translationX的变化: -0.6 -> 0 -> 0
         if (layout != null){
-            int width = layout.getWidth();
-            layout.setTranslationX(-width * 0.3f * Math.max(0f, mScrimOpacity - 0.15f));
+            float translationX = (float) ((0.63 * mScrollPercent - 0.6) * layout.getWidth());
+            if (translationX > 0){
+                translationX = 0;
+            }
+            layout.setTranslationX(translationX);
         }
     }
 
@@ -363,17 +318,11 @@ public class SwipeBackLayout extends FrameLayout {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             if (changedView == mContentView) {
                 //mContentView.getWidth() 实际是屏幕宽度
-                //mShadowLeft.getIntrinsicWidth() 阴影的宽度
-                //mContentView.getWidth() + mShadowLeft.getIntrinsicWidth()  需要把阴影也拖拽出屏幕,所以总宽度是阴影的宽度加上屏幕的宽度
-                mScrollPercent = Math.abs((float) left
-                        / (mContentView.getWidth() + mShadowLeft.getIntrinsicWidth()));
-
+                mScrollPercent = Math.abs((float) left / mContentView.getWidth());
+                mScrimOpacity = 1 - mScrollPercent;
                 mContentLeft = left;
 
-                //未执行动画就平移
-                if (!enterAnimRunning) {
-                    moveBackgroundLayout(getPreSwipeBackLayout());
-                }
+                if (mPreLayoutScrollable) moveBackgroundLayout(getPreSwipeBackLayout());
 
                 invalidate();
 
@@ -398,12 +347,8 @@ public class SwipeBackLayout extends FrameLayout {
             final int childWidth = releasedChild.getWidth();
             int left = 0, top = 0;
             if (xvel > DEFAULT_VELOCITY_THRESHOLD || mScrollPercent > DEFAULT_SCROLL_THRESHOLD) {
-                left = childWidth + mShadowLeft.getIntrinsicWidth();
+                left = childWidth;
                 mViewDragHelper.settleCapturedViewAt(left, top);
-
-                if (mScrimOpacity < 0.85f) {
-                    startAnimOfBackgroundLayout(getPreSwipeBackLayout());
-                }
 
             } else {
                 left = 0;
@@ -445,9 +390,6 @@ public class SwipeBackLayout extends FrameLayout {
          * Invoke when state change
          *
          * @param state flag to describe scroll state
-         * @see #STATE_IDLE
-         * @see #STATE_DRAGGING
-         * @see #STATE_SETTLING
          */
         void onDragStateChange(int state);
 

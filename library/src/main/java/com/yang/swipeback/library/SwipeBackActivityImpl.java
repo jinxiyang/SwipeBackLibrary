@@ -50,14 +50,6 @@ public class SwipeBackActivityImpl extends AppCompatActivity implements ISwipeBa
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getSwipeBackLayout().recovery();
-        }
-    }
-
-    @Override
     public SwipeBackLayout getSwipeBackLayout() {
         return mSwipeBackLayout;
     }
