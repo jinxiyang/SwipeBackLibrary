@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,7 +182,7 @@ public class SwipeBackLayout extends FrameLayout {
         mContentView = view;
     }
 
-    public void attachToActivity(SwipeBackActivityImpl activity) {
+    public void attachToActivity(FragmentActivity activity) {
         mActivity = activity;
         TypedArray a = activity.getTheme().obtainStyledAttributes(new int[]{
                 android.R.attr.windowBackground
@@ -338,22 +337,6 @@ public class SwipeBackLayout extends FrameLayout {
                 if (mPreLayoutScrollable) moveBackgroundLayout(getPreSwipeBackLayout());
 
                 invalidate();
-
-                if (mScrollPercent >= 1){
-                    if (mFragment != null && !mFragment.isDetached()){//结束当前fragment时,取消动画
-                        ISwipeBackFragment iSwipeBackFragment = (ISwipeBackFragment)mFragment;
-                        iSwipeBackFragment.getPreFragment().setLockable(true);
-
-                        iSwipeBackFragment.setLockable(true);
-                        mFragment.getFragmentManager().popBackStackImmediate();
-                        iSwipeBackFragment.setLockable(false);
-
-                        iSwipeBackFragment.getPreFragment().setLockable(false);
-                    }else if (mActivity != null && !mActivity.isFinishing()){
-                        mActivity.finish();
-                    }
-
-                }
             }
         }
 
@@ -381,12 +364,26 @@ public class SwipeBackLayout extends FrameLayout {
                     listener.onDragStateChange(state);
                 }
             }
-
 //            Log.i("======", "onViewDragStateChanged:" + state + ":" + mScrollPercent);
 
-            if (state == ViewDragHelper.STATE_IDLE && mScrollPercent < 1f) {
-                recovery(getPreSwipeBackLayout());
-                if (mActivity != null) Utils.convertActivotyFromTranslucent(mActivity);
+            if (state == ViewDragHelper.STATE_IDLE) {
+                if (mScrollPercent >= 1){
+                    if (mFragment != null && !mFragment.isDetached()){//结束当前fragment时,取消动画
+                        ISwipeBackFragment iSwipeBackFragment = (ISwipeBackFragment)mFragment;
+                        iSwipeBackFragment.getPreFragment().setLockable(true);
+
+                        iSwipeBackFragment.setLockable(true);
+                        mFragment.getFragmentManager().popBackStackImmediate();
+                        iSwipeBackFragment.setLockable(false);
+
+                        iSwipeBackFragment.getPreFragment().setLockable(false);
+                    }else if (mActivity != null && !mActivity.isFinishing()){
+                        mActivity.finish();
+                    }
+                }else{
+                    recovery(getPreSwipeBackLayout());
+                    if (mActivity != null) Utils.convertActivotyFromTranslucent(mActivity);
+                }
             }
         }
     }
