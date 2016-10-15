@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -262,7 +263,17 @@ public class SwipeBackLayout extends FrameLayout {
             if (translationX > 0){
                 translationX = 0;
             }
+//            Log.i("======", "moveBackgroundLayout:" + translationX);
             layout.setTranslationX(translationX);
+        }
+    }
+
+    /**
+     * 背景回到原位
+     */
+    private void recovery(SwipeBackLayout layout) {
+        if (layout != null){
+            layout.setTranslationX(0);
         }
     }
 
@@ -322,18 +333,22 @@ public class SwipeBackLayout extends FrameLayout {
                 mScrimOpacity = 1 - mScrollPercent;
                 mContentLeft = left;
 
+//                Log.i("======", "onViewPositionChanged:" + mContentLeft);
+
                 if (mPreLayoutScrollable) moveBackgroundLayout(getPreSwipeBackLayout());
 
                 invalidate();
 
                 if (mScrollPercent >= 1){
-                    if (mFragment != null && !mFragment.isDetached()){
+                    if (mFragment != null && !mFragment.isDetached()){//结束当前fragment时,取消动画
                         ISwipeBackFragment iSwipeBackFragment = (ISwipeBackFragment)mFragment;
+                        iSwipeBackFragment.getPreFragment().setLockable(true);
+
                         iSwipeBackFragment.setLockable(true);
                         mFragment.getFragmentManager().popBackStackImmediate();
                         iSwipeBackFragment.setLockable(false);
 
-                        ((ISwipeBackFragment)(iSwipeBackFragment.getPreFragment())).setLockable(false);
+                        iSwipeBackFragment.getPreFragment().setLockable(false);
                     }else if (mActivity != null && !mActivity.isFinishing()){
                         mActivity.finish();
                     }
@@ -346,8 +361,9 @@ public class SwipeBackLayout extends FrameLayout {
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
             final int childWidth = releasedChild.getWidth();
             int left = 0, top = 0;
+//            Log.i("======", "onViewReleased:" + xvel + ":" + mScrollPercent);
             if (xvel > DEFAULT_VELOCITY_THRESHOLD || mScrollPercent > DEFAULT_SCROLL_THRESHOLD) {
-                left = childWidth;
+                left = childWidth + 1;
                 mViewDragHelper.settleCapturedViewAt(left, top);
 
             } else {
@@ -366,8 +382,11 @@ public class SwipeBackLayout extends FrameLayout {
                 }
             }
 
+//            Log.i("======", "onViewDragStateChanged:" + state + ":" + mScrollPercent);
+
             if (state == ViewDragHelper.STATE_IDLE && mScrollPercent < 1f) {
-                Utils.convertActivotyFromTranslucent(mActivity);
+                recovery(getPreSwipeBackLayout());
+                if (mActivity != null) Utils.convertActivotyFromTranslucent(mActivity);
             }
         }
     }

@@ -28,7 +28,7 @@ public class ThirdActivity extends SwipeBackActivityImpl {
     public void addNewFragment(Fragment currFragment, Fragment nextFragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(R.anim.swipeback_activity_open_enter, R.anim.swipeback_activity_open_exit, R.anim.swipeback_activity_close_enter, R.anim.swipeback_activity_close_exit)
+                .setCustomAnimations(R.anim.activity_or_fragment_enter, R.anim.activity_or_fragment_exit, R.anim.activity_or_fragment_pop_enter, R.anim.activity_or_fragment_pop_exit)
                 .add(R.id.contentFrame, nextFragment, nextFragment.getClass().getSimpleName())
                 .hide(currFragment)
                 .addToBackStack(currFragment.getClass().getSimpleName())

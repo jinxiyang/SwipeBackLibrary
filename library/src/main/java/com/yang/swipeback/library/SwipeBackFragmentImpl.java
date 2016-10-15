@@ -34,7 +34,7 @@ public class SwipeBackFragmentImpl extends Fragment implements ISwipeBackFragmen
         mSwipeBackLayout = new SwipeBackLayout(getActivity());
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mSwipeBackLayout.setLayoutParams(params);
-        mSwipeBackLayout.setBackgroundColor(Color.TRANSPARENT);
+//        mSwipeBackLayout.setBackgroundColor(Color.TRANSPARENT);
     }
 
     protected View attachToSwipeBack(View view) {
@@ -59,27 +59,27 @@ public class SwipeBackFragmentImpl extends Fragment implements ISwipeBackFragmen
         super.onActivityCreated(savedInstanceState);
 
         View view = getView();
-        initFragmentBackground(view);
+//        initFragmentBackground(view);
         if (view != null) {
             view.setClickable(true);
         }
     }
-
-    private void initFragmentBackground(View view) {
-        if (view instanceof SwipeBackLayout) {
-            View childView = ((SwipeBackLayout) view).getChildAt(0);
-            setBackground(childView);
-        } else {
-            setBackground(view);
-        }
-    }
-
-    private void setBackground(View view) {
-        if (view != null && view.getBackground() == null) {
-                int background = getWindowBackground();
-                view.setBackgroundResource(background);
-        }
-    }
+//
+//    private void initFragmentBackground(View view) {
+//        if (view instanceof SwipeBackLayout) {
+//            View childView = ((SwipeBackLayout) view).getChildAt(0);
+//            setBackground(childView);
+//        } else {
+//            setBackground(view);
+//        }
+//    }
+//
+//    private void setBackground(View view) {
+//        if (view != null && view.getBackground() == null) {
+//                int background = getWindowBackground();
+//                view.setBackgroundResource(background);
+//        }
+//    }
 
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
@@ -89,14 +89,14 @@ public class SwipeBackFragmentImpl extends Fragment implements ISwipeBackFragmen
         return super.onCreateAnimation(transit, enter, nextAnim);
     }
 
-    protected int getWindowBackground() {
-        TypedArray a = getActivity().getTheme().obtainStyledAttributes(new int[]{
-                android.R.attr.windowBackground
-        });
-        int background = a.getResourceId(0, 0);
-        a.recycle();
-        return background;
-    }
+//    protected int getWindowBackground() {
+//        TypedArray a = getActivity().getTheme().obtainStyledAttributes(new int[]{
+//                android.R.attr.windowBackground
+//        });
+//        int background = a.getResourceId(0, 0);
+//        a.recycle();
+//        return background;
+//    }
 
 
 
