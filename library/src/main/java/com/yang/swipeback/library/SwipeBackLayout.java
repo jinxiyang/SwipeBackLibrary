@@ -256,9 +256,9 @@ public class SwipeBackLayout extends FrameLayout {
      */
     private void moveBackgroundLayout(SwipeBackLayout layout) {
         //mScrollPercent 变化时: 0 -> 0.95 -> 1
-        //背景translationX的变化: -0.6 -> 0 -> 0
+        //背景translationX的变化: -0.4 -> 0 -> 0
         if (layout != null){
-            float translationX = (float) ((0.63 * mScrollPercent - 0.6) * layout.getWidth());
+            float translationX = (float) (0.4 / 0.95 * (mScrollPercent - 0.95) * layout.getWidth());
             if (translationX > 0){
                 translationX = 0;
             }
@@ -382,7 +382,7 @@ public class SwipeBackLayout extends FrameLayout {
                     }
                 }else{
                     recovery(getPreSwipeBackLayout());
-                    if (mActivity != null) Utils.convertActivotyFromTranslucent(mActivity);
+                    if (mActivity != null) Utils.convertActivityFromTranslucent(mActivity);
                 }
             }
         }

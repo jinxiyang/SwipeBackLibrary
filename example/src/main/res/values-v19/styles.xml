@@ -3,6 +3,9 @@
     <style name="TranslucentTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">false</item>
+
+        <!--侧滑滑动-API19及以下必要的-->
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
 
