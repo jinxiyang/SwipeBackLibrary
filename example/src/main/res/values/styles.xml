@@ -9,7 +9,6 @@
     </style>
 
     <style name="TranslucentTheme" parent="AppTheme">
-
         <!--是否半透明-->
         <item name="android:windowIsTranslucent">true</item>
     </style>

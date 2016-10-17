@@ -11,6 +11,7 @@
         android:theme="@style/TranslucentTheme">
         <activity android:name=".Firstctivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
+            android:theme="@style/AppTheme"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
