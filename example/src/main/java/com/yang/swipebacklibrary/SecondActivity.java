@@ -3,6 +3,7 @@ package com.yang.swipebacklibrary;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.yang.swipeback.library.ISwipeBackActivity;
@@ -20,6 +21,10 @@ public class SecondActivity extends SwipeBackActivityImpl {
                 startActivity(new Intent(SecondActivity.this, ThirdActivity.class));
             }
         });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("second activity");
+        setSupportActionBar(toolbar);
     }
 
     @Override

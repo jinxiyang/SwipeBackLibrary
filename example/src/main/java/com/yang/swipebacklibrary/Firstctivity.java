@@ -23,8 +23,7 @@ public class Firstctivity extends SwipeBackActivityImpl {
         });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("swipebacklibrary");
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        toolbar.setTitle("first activity");
         setSupportActionBar(toolbar);
     }
 
@@ -34,6 +33,7 @@ public class Firstctivity extends SwipeBackActivityImpl {
         setSwipeBackEnable(false);
     }
 
+    //这是最底层activity,不需要背景透明
     @Override
     public boolean isTransparent() {
         return false;

@@ -3,6 +3,7 @@ package com.yang.swipebacklibrary;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,8 @@ public class FragmentA extends SwipeBackFragmentImpl {
                 ((ThirdActivity)getActivity()).addNewFragment(FragmentA.this, new FragmentB());
             }
         });
+        Toolbar toolbar = (Toolbar)view.findViewById(R.id.toolbar);
+        toolbar.setTitle("fragment a");
         setSwipeBackEnable(false);
         return attachToSwipeBack(view);
     }

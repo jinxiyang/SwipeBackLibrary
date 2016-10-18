@@ -11,6 +11,7 @@ import com.yang.swipeback.library.ActivityStack;
 public class AppApplication extends Application {
     public static AppApplication instance;
 
+    //这是库中提供的activity栈,放到Application中,不会被GC
     public ActivityStack stack;
 
     @Override
