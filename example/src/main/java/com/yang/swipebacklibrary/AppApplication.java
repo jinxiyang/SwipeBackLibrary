@@ -2,12 +2,8 @@ package com.yang.swipebacklibrary;
 
 import android.app.Application;
 
-import com.yang.swipeback.library.newversion.ActivityStack;
-import com.yang.swipeback.library.newversion.SwipeBackManager;
-
-/**
- * Created by yang on 2016/10/14.
- */
+import com.yang.swipeback.ActivityStack;
+import com.yang.swipeback.SwipeBackManager;
 
 public class AppApplication extends Application {
     public static AppApplication instance;
@@ -27,9 +23,5 @@ public class AppApplication extends Application {
 
     public static AppApplication getInstance() {
         return instance;
-    }
-
-    public ActivityStack getStack() {
-        return stack;
     }
 }

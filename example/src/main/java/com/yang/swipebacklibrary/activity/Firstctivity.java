@@ -1,13 +1,15 @@
-package com.yang.swipebacklibrary;
+package com.yang.swipebacklibrary.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class Firstctivity extends AppCompatActivity {
+import com.yang.swipebacklibrary.R;
+import com.yang.swipebacklibrary.base.BaseActivity;
+
+public class Firstctivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,5 +31,6 @@ public class Firstctivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        getActivitySwipeBackDelegate().setSwipeBackEnable(false);
     }
 }

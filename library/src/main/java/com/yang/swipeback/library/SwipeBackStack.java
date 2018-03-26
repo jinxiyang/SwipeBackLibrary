@@ -1,6 +1,6 @@
 package com.yang.swipeback.library;
 
-import com.yang.swipeback.library.newversion.SwipeBackDelegate;
+import com.yang.swipeback.SwipeBackDelegate;
 
 import java.util.ArrayList;
 import java.util.List;

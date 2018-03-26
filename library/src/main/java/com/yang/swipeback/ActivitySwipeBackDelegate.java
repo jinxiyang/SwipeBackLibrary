@@ -1,12 +1,9 @@
-package com.yang.swipeback.library.newversion;
+package com.yang.swipeback;
 
 import android.app.Activity;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -17,10 +14,10 @@ import android.view.Window;
 
 public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
 
-    private AppCompatActivity activity;
-    private AppCompatActivity preActivity;
+    private Activity activity;
+    private Activity preActivity;
 
-    public ActivitySwipeBackDelegate(AppCompatActivity activity) {
+    public ActivitySwipeBackDelegate(Activity activity) {
         this.activity = activity;
     }
 
@@ -37,7 +34,7 @@ public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
     public View getPreView() {
         Activity activity = preActivity;
         if (activity == null) {
-            activity = ActivityStack.getInstance().getBackActivity();
+            activity = preActivity = ActivityStack.getInstance().getBackActivity();
         }
         if (activity != null){
             return activity.getWindow().getDecorView();
@@ -84,6 +81,7 @@ public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
                         if (view != null){
                             view.setTranslationX(0);
                         }
+                        Utils.convertActivityFromTranslucent(activity);
                     }
                 }
             }
@@ -96,12 +94,12 @@ public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
 
             @Override
             public void onScrollOverThreshold() {
-                Logger.d("onScrollOverThreshold", "onScrollOverThreshold");
+//                Logger.d("onScrollOverThreshold", "onScrollOverThreshold");
             }
 
             @Override
             public void onScroll(int edgeFlag, int left, int top, int dx, int dy, float scrollPercent) {
-                Logger.d("onScroll", left + " " + dx);
+//                Logger.d("onScroll", left + " " + dx);
 
                 View view = getPreView();
                 //mScrollPercent 变化时: 0 -> 0.95 -> 1

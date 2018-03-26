@@ -4,6 +4,6 @@
     android:id="@+id/contentFrame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yang.swipebacklibrary.ThirdActivity">
+    tools:context="com.yang.swipebacklibrary.activity.ThirdActivity">
 
 </FrameLayout>

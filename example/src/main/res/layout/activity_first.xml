@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="#ffffe0"
-    tools:context="com.yang.swipebacklibrary.Firstctivity">
+    tools:context="com.yang.swipebacklibrary.activity.Firstctivity">
 
     <include layout="@layout/include_toolbar"/>
 

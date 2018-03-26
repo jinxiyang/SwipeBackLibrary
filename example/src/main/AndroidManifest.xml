@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
 
         <!--这是最底层activity,不需要背景透明,主题不是透明的-->
-        <activity android:name=".Firstctivity"
+        <activity android:name=".activity.Firstctivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
             android:theme="@style/AppTheme"
             >
@@ -22,9 +22,9 @@
             </intent-filter>
         </activity>
         <!--配置configChanges这一点,在旋转屏时,activity不会重建-->
-        <activity android:name=".SecondActivity"
+        <activity android:name=".activity.SecondActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"/>
-        <activity android:name=".ThirdActivity"
+        <activity android:name=".activity.ThirdActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"/>
     </application>
 

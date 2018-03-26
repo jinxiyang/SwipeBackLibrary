@@ -1,4 +1,4 @@
-package com.yang.swipeback.library.newversion;
+package com.yang.swipeback;
 
 import android.util.Log;
 
