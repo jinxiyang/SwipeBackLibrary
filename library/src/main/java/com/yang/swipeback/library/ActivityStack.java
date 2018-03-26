@@ -8,15 +8,19 @@ import java.util.Vector;
 
 
 public class ActivityStack implements Application.ActivityLifecycleCallbacks {
-    private static ActivityStack ourInstance = new ActivityStack();
+    private static ActivityStack instance;
 
     private Vector<Activity> activities = new Vector<>();
 
     public static ActivityStack getInstance() {
-        return ourInstance;
+        if (instance == null){
+            instance = new ActivityStack();
+        }
+        return instance;
     }
 
-    public ActivityStack() {
+    private ActivityStack() {
+
     }
 
     public Activity getTopActivity() {

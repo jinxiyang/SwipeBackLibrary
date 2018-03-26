@@ -3,6 +3,7 @@ package com.yang.swipebacklibrary;
 import android.app.Application;
 
 import com.yang.swipeback.library.ActivityStack;
+import com.yang.swipeback.library.SwipeBackManager;
 
 /**
  * Created by yang on 2016/10/14.
@@ -18,8 +19,9 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        stack = new ActivityStack();
-        this.registerActivityLifecycleCallbacks(stack);
+
+        SwipeBackManager.init(this);
+        SwipeBackManager.setDebug(true);
     }
 
 
