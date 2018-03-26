@@ -25,7 +25,7 @@ public class SwipeBackFragmentImpl extends Fragment implements ISwipeBackFragmen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNoAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.no_anim);
+        mNoAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.swipeback_no_anim);
         onFragmentCreate();
     }
 

@@ -2,8 +2,8 @@ package com.yang.swipebacklibrary;
 
 import android.app.Application;
 
-import com.yang.swipeback.library.ActivityStack;
-import com.yang.swipeback.library.SwipeBackManager;
+import com.yang.swipeback.library.newversion.ActivityStack;
+import com.yang.swipeback.library.newversion.SwipeBackManager;
 
 /**
  * Created by yang on 2016/10/14.

@@ -1,4 +1,4 @@
-package com.yang.swipeback.library;
+package com.yang.swipeback.library.newversion;
 
 import android.app.Application;
 import android.content.Context;

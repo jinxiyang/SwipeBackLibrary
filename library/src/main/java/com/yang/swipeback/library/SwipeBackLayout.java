@@ -240,7 +240,7 @@ public class SwipeBackLayout extends FrameLayout {
      * 拖动时移动的内容区
      * @param view
      */
-    private void setContentView(View view) {
+    protected void setContentView(View view) {
         mContentView = view;
     }
 
