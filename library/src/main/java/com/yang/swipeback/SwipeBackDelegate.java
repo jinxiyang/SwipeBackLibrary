@@ -11,8 +11,6 @@ public abstract class SwipeBackDelegate {
 
     protected SwipeBackLayout mSwipeBackLayout;
 
-    public abstract View findViewById(int id);
-
     public SwipeBackLayout getSwipeBackLayout() {
         return mSwipeBackLayout;
     }

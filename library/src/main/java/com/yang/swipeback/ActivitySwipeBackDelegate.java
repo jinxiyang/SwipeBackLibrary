@@ -22,15 +22,6 @@ public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
     }
 
     @Override
-    public View findViewById(int id) {
-        View view = activity.findViewById(id);
-        if (view == null && mSwipeBackLayout != null) {
-            return mSwipeBackLayout.findViewById(id);
-        }
-        return view;
-    }
-
-    @Override
     public View getPreView() {
         Activity activity = preActivity;
         if (activity == null) {
