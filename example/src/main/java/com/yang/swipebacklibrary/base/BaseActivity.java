@@ -2,69 +2,75 @@ package com.yang.swipebacklibrary.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-import com.yang.swipeback.ActivitySwipeBackDelegate;
+import com.yang.swipeback.SwipeBackActivity;
 
 /**
  * Created by yang on 2018/3/26.
  */
 
-public class BaseActivity extends AppCompatActivity{
+public class BaseActivity extends SwipeBackActivity {
 
-    private ActivitySwipeBackDelegate swipeBackDelegate;
+    private String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        swipeBackDelegate = new ActivitySwipeBackDelegate(this);
+        Log.i(TAG, "onCreate: ");
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        swipeBackDelegate.onPostCreate();
+        Log.i(TAG, "onPostCreate: ");
     }
 
-    public ActivitySwipeBackDelegate getActivitySwipeBackDelegate() {
-        return swipeBackDelegate;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: ");
     }
 
-
-
-    public void loadFragment(BaseFragment fragment){
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(getContextViewId(), fragment, fragment.getClass().getSimpleName())
-                .addToBackStack(fragment.getClass().getSimpleName())
-                .commit();
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(TAG, "onRestart: ");
     }
 
-    public void startFragment(BaseFragment currFragment, BaseFragment nextFragment) {
-        if (getContextViewId() == 0){
-            throw new RuntimeException("contextViewId cannot be null");
-        }
-        BaseFragment.TransitionConfig transitionConfig = nextFragment.transitionConfig();
-        String tagName = nextFragment.getClass().getSimpleName();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(transitionConfig.enter, transitionConfig.exit, transitionConfig.popenter, transitionConfig.popout)
-                .add(getContextViewId(), nextFragment, nextFragment.getClass().getSimpleName())
-                .hide(currFragment)
-                .addToBackStack(tagName)
-                .commit();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
     }
 
-
-    /**
-     * 获取当前的 Fragment。
-     */
-    public BaseFragment getCurrentFragment() {
-        return (BaseFragment) getSupportFragmentManager().findFragmentById(getContextViewId());
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
     }
 
-    //当添加fragment时，子类必须重写该方法
-    public int getContextViewId() {
-        return 0;
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop: ");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(TAG, "onSaveInstanceState: ");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i(TAG, "onRestoreInstanceState: ");
     }
 }

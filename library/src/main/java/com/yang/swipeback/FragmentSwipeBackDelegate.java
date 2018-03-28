@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
-import java.util.List;
+import com.yang.swipeback.library.R;
 
 
 public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
@@ -31,14 +33,12 @@ public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
     public View getPreView() {
         if (preView == null) {
             FragmentManager fm = fragment.getFragmentManager();
-            List<Fragment> fragments = fm.getFragments();
-            if (fragments != null && fragments.size() > 1) {
-                int index = fragments.indexOf(fragment);
-                for (int i = index - 1; i >= 0; i--) {
-                    Fragment f = fragments.get(i);
-                    if (f != null && f.getView() != null) {
-                        preView = f.getView();
-                    }
+            int backStackEntryCount = fm.getBackStackEntryCount();
+            if (backStackEntryCount >= 2){
+                FragmentManager.BackStackEntry entry = fm.getBackStackEntryAt(backStackEntryCount - 2);
+                Fragment f = fm.findFragmentByTag(entry.getName());
+                if (f != null && f.getView() != null){
+                    preView = f.getView();
                 }
             }
         }
@@ -70,11 +70,13 @@ public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
                             }
                         }
                     }
+                    SwipeBackManager.setSwippingBack(false);
                 }
             }
 
             @Override
             public void onEdgeTouch(int edgeFlag) {
+                SwipeBackManager.setSwippingBack(true);
                 Logger.d("onEdgeTouch", edgeFlag+ "");
                 View view = getPreView();
                 if (view != null){
@@ -82,6 +84,7 @@ public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
                         view.setVisibility(View.VISIBLE);
                     }
                 }
+
             }
 
             @Override
@@ -107,6 +110,15 @@ public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
         });
         return mSwipeBackLayout;
     }
+
+
+    public Animation onCreateAnimation() {
+        if (SwipeBackManager.isSwippingBack()){
+            return AnimationUtils.loadAnimation(fragment.getActivity(), R.anim.swipeback_no_anim);
+        }
+        return null;
+    }
+
 
     public interface OnFragmentPopBackStackListener{
         void popBackStack();

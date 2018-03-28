@@ -14,6 +14,8 @@ public class SwipeBackManager {
 
     private static boolean debug = true;
 
+    private static boolean swippingBack = false;
+
     public static void init(Context context){
         if (context == null){
             throw new RuntimeException("context is null");
@@ -28,5 +30,13 @@ public class SwipeBackManager {
 
     public static void setDebug(boolean debug) {
         SwipeBackManager.debug = debug;
+    }
+
+    public static boolean isSwippingBack() {
+        return swippingBack;
+    }
+
+    public static void setSwippingBack(boolean swippingBack) {
+        SwipeBackManager.swippingBack = swippingBack;
     }
 }

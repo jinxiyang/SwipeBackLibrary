@@ -74,11 +74,13 @@ public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
                         }
                         Utils.convertActivityFromTranslucent(activity);
                     }
+                    SwipeBackManager.setSwippingBack(false);
                 }
             }
 
             @Override
             public void onEdgeTouch(int edgeFlag) {
+                SwipeBackManager.setSwippingBack(true);
                 Logger.d("onEdgeTouch", edgeFlag+ "");
                 Utils.convertActivityToTranslucent(activity);
             }

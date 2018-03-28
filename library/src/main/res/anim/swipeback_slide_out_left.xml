@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@anim/decelerate_low_factor_interpolator">
+    android:interpolator="@anim/swipeback_decelerate_low_factor_interpolator">
 
     <translate
         android:duration="300"
