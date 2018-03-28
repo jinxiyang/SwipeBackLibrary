@@ -1,5 +1,6 @@
 package com.yang.swipeback;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -47,6 +48,7 @@ public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
     public View onCreateView(View view) {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mSwipeBackLayout = new SwipeBackLayout(view.getContext());
+        mSwipeBackLayout.setBackgroundColor(Color.TRANSPARENT);
         mSwipeBackLayout.setLayoutParams(params);
         mSwipeBackLayout.addView(view);
         mSwipeBackLayout.setContentView(view);

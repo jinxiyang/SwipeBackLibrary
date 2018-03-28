@@ -23,6 +23,10 @@ public class ActivityStack implements Application.ActivityLifecycleCallbacks {
 
     }
 
+    public int count(){
+        return activities.size();
+    }
+
     public Activity getTopActivity() {
         if (activities.size() > 0) {
             return activities.get(activities.size() - 1);

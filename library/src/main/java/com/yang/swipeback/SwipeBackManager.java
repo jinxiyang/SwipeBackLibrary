@@ -18,7 +18,7 @@ public class SwipeBackManager {
         if (context == null){
             throw new RuntimeException("context is null");
         }
-        ((Application)context).registerActivityLifecycleCallbacks(ActivityStack.getInstance());
+        ((Application)context.getApplicationContext()).registerActivityLifecycleCallbacks(ActivityStack.getInstance());
     }
 
 

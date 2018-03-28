@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 
 import java.lang.reflect.Method;
 
@@ -101,5 +102,10 @@ public class Utils {
         } catch (Throwable ignore) {
             ignore.printStackTrace();
         }
+    }
+
+
+    public static void clearFragmentAnim(Fragment fragment){
+
     }
 }
