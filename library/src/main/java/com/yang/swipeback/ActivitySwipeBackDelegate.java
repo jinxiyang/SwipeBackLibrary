@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -15,7 +17,7 @@ import android.view.Window;
 public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
 
     private Activity activity;
-    private Activity preActivity;
+    private View preView = null;
 
     public ActivitySwipeBackDelegate(Activity activity) {
         this.activity = activity;
@@ -23,14 +25,13 @@ public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
 
     @Override
     public View getPreView() {
-        Activity activity = preActivity;
-        if (activity == null) {
-            activity = preActivity = ActivityStack.getInstance().getBackActivity();
+        if (preView == null) {
+            Activity backActivity = ActivityStack.getInstance().getBackActivity();
+            if (backActivity != null){
+                preView = backActivity.getWindow().getDecorView();
+            }
         }
-        if (activity != null){
-            return activity.getWindow().getDecorView();
-        }
-        return null;
+        return preView;
     }
 
     public void onPostCreate() {
@@ -106,5 +107,22 @@ public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
                 }
             }
         });
+    }
+
+
+    private FragmentManager.OnBackStackChangedListener backStackChangedListenerDefault = new FragmentManager.OnBackStackChangedListener() {
+        @Override
+        public void onBackStackChanged() {
+            if (((AppCompatActivity)ActivitySwipeBackDelegate.this.activity).getSupportFragmentManager().getBackStackEntryCount() == 0) {//最多有一个通过loadFragment加载的fragment, 可能要禁止或者放开
+                setSwipeBackEnable(ActivityStack.getInstance().count() > 0);
+            } else {//返回栈中不只一个fragment，禁止activity的滑动返回功能
+                setSwipeBackEnable(false);
+            }
+        }
+    };
+
+
+    public FragmentManager.OnBackStackChangedListener getBackStackChangedListenerDefault() {
+        return backStackChangedListenerDefault;
     }
 }

@@ -3,13 +3,14 @@ package com.yang.swipeback;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.yang.swipeback.library.R;
+
+import java.util.List;
 
 
 public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
@@ -32,14 +33,10 @@ public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
     @Override
     public View getPreView() {
         if (preView == null) {
-            FragmentManager fm = fragment.getFragmentManager();
-            int backStackEntryCount = fm.getBackStackEntryCount();
-            if (backStackEntryCount >= 2){
-                FragmentManager.BackStackEntry entry = fm.getBackStackEntryAt(backStackEntryCount - 2);
-                Fragment f = fm.findFragmentByTag(entry.getName());
-                if (f != null && f.getView() != null){
-                    preView = f.getView();
-                }
+            List<Fragment> fragments = fragment.getFragmentManager().getFragments();
+            int index = fragments.indexOf(fragment);
+            if (index > 0 && fragments.get(index - 1) != null){
+                preView = fragments.get(index - 1).getView();
             }
         }
         return preView;
@@ -57,7 +54,6 @@ public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
         mSwipeBackLayout.addSwipeListener(new SwipeBackLayout.SwipeListener() {
             @Override
             public void onScrollStateChange(int state, float scrollPercent) {
-                Logger.d("onScrollStateChange", state + "  ||  " + scrollPercent);
                 if (state == SwipeBackLayout.STATE_IDLE){
                     if (scrollPercent >= 1){
                         onFragmentPopBackStackListener.popBackStack();
@@ -72,12 +68,13 @@ public class FragmentSwipeBackDelegate extends SwipeBackDelegate {
                     }
                     SwipeBackManager.setSwippingBack(false);
                 }
+                Logger.d("onScrollStateChange", state + "  ||  " + scrollPercent);
             }
 
             @Override
             public void onEdgeTouch(int edgeFlag) {
-                SwipeBackManager.setSwippingBack(true);
                 Logger.d("onEdgeTouch", edgeFlag+ "");
+                SwipeBackManager.setSwippingBack(true);
                 View view = getPreView();
                 if (view != null){
                     if (view.getVisibility() != View.VISIBLE){

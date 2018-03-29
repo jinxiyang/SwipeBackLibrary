@@ -24,29 +24,6 @@ public abstract class SwipeBackFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         swipeBackDelegate = new FragmentSwipeBackDelegate(this);
-        swipeBackDelegate.setOnFragmentPopBackStackListener(new FragmentSwipeBackDelegate.OnFragmentPopBackStackListener() {
-            @Override
-            public void popBackStack() {
-                //当fragment退出返回栈时，注意放开activity的滑动返回功能
-                if (ActivityStack.getInstance().count() > 1
-                        && getFragmentManager().getBackStackEntryCount() <= 2
-                        && getActivity() instanceof SwipeBackActivity) {
-                    ((SwipeBackActivity) getActivity()).getActivitySwipeBackDelegate().setSwipeBackEnable(true);
-                }
-
-                if (getFragmentManager().getBackStackEntryCount() == 1){
-                    getActivity().finish();
-                    return;
-                }
-                getFragmentManager().popBackStackImmediate();
-            }
-        });
-
-        //添加新的fragment时注意禁止activity的滑动返回功能
-        if (getActivity() instanceof SwipeBackActivity
-                && getFragmentManager().getBackStackEntryCount() > 1){
-            ((SwipeBackActivity) getActivity()).getActivitySwipeBackDelegate().setSwipeBackEnable(false);
-        }
     }
 
     @Nullable
@@ -74,7 +51,7 @@ public abstract class SwipeBackFragment extends Fragment {
 
 
 
-    public void startFragment(SwipeBackFragment currFragment, SwipeBackFragment nextFragment){
+    public void startFragment(Fragment currFragment, Fragment nextFragment){
         if (getActivity() instanceof SwipeBackActivity) {
             ((SwipeBackActivity) getActivity()).startFragment(currFragment, nextFragment);
         }else {
