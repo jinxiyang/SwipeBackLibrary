@@ -11,8 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.yang.swipeback.library.R;
-
 import java.util.ArrayList;
 import java.util.List;
 

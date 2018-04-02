@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 
-import com.yang.swipeback.library.R;
-
 /**
  * Author: 杨进玺
  * Time: 2018/3/27  13:43
