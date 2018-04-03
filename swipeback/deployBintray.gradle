@@ -13,8 +13,17 @@ File projectPropertiesFile = project.file('deploy.properties')
 if (projectPropertiesFile.exists()) {
     properties.load(projectPropertiesFile.newDataInputStream())
 } else {
-    throw new Error("Cannot find deploy.properties file in " + project.name + " folder")
+    println "Cannot find deploy.properties file in " + project.name + " folder"
 }
+
+Properties localProperties = new Properties()
+File localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.newDataInputStream())
+} else {
+    println "Cannot find local.properties file in " + project.name + " folder"
+}
+
 
 //发布的组别和版本号, 上传（bintrayUpload）时需要
 group = properties.getProperty("project.groupId")
@@ -87,8 +96,8 @@ install {
 
 
 bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    user = localProperties.getProperty("bintray.user")
+    key = localProperties.getProperty("bintray.apikey")
     configurations = ['archives']
     pkg {
         repo = properties.getProperty("project.repo")
