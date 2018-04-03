@@ -1,11 +1,14 @@
 
 
-/*****************************************************
-*                :library:javadocJar                 *
-*                :library:sourcesJar                 *
-*                :library:install                    *
-*                :library:bintrayUpload              *
-******************************************************/
+/**********************************************************************************************************
+ *                                                                                                        *
+ *                1、gradlew :swipeback:javadocJar :swipeback:sourcesJar :swipeback:install               *
+ *                   简写版：gradlew javadocJar sourcesJar install                                         *
+ *                                                                                                        *
+ *                2、gradlew :swipeback:bintrayUpload                                                     *
+ *                   简写版：gradlew bintrayUpload                                                         *
+ *                                                                                                        *
+ ***********************************************************************************************************/
 
 
 Properties properties = new Properties()
