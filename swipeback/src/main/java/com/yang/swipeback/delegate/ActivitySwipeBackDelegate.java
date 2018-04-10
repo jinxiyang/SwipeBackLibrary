@@ -60,6 +60,7 @@ public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
             @Override
             public void onScrollStateChange(int state, float scrollPercent) {
                 if (state == SwipeBackLayout.STATE_IDLE){
+                    SwipeBackManager.setSwippingBack(false);
                     if (scrollPercent >= 1){
                         onSwipeBackListener.finish();
                     }else if (scrollPercent <= 0){
@@ -68,7 +69,6 @@ public class ActivitySwipeBackDelegate extends SwipeBackDelegate {
                         }
                         onSwipeBackListener.onBackToOriginPosition();
                     }
-                    SwipeBackManager.setSwippingBack(false);
                 }
             }
 

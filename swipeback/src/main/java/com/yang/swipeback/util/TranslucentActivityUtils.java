@@ -8,6 +8,9 @@ import android.os.Build;
 
 import java.lang.reflect.Method;
 
+/**
+ * 通过反射调用私有API，实现activity透明，移动时可看到下面activity的内容
+ */
 public class TranslucentActivityUtils {
     /**
      * Convert a translucent themed Activity

@@ -79,12 +79,18 @@ public class SwipeBackActivity extends AppCompatActivity{
     }
 
 
+
+    //fragment栈变化监听器，
+    //1、activity中fragment个数 >1 时，屏蔽掉activity的滑动返回功能，滑动返回发生在fragment间
+    //2、activity中fragment个数 >1 时，启用activity的滑动返回功能，触摸事件不会下发到fragment，滑动返回发生在activity间
     private FragmentManager.OnBackStackChangedListener backStackChangedListenerDefault = new FragmentManager.OnBackStackChangedListener() {
         @Override
         public void onBackStackChanged() {
-            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {//最多有一个通过loadFragment加载的fragment, 可能要禁止或者放开
+            //这里为什么是和0比较？
+            //因为第一个fragment通过loadFragment加载，没有入栈。若第一个fragment入栈了，按返回键，第一个fragment会出栈，activity会一片空白
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 setSwipeBackEnable(ActivityStack.getInstance().count() > 0);
-            } else {//返回栈中不只一个fragment，禁止activity的滑动返回功能
+            } else {
                 setSwipeBackEnable(false);
             }
         }

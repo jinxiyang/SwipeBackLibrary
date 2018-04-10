@@ -1,6 +1,7 @@
 package com.yang.swipeback.listener;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.yang.swipeback.delegate.FragmentSwipeBackDelegate;
@@ -51,6 +52,9 @@ public class OnSwipeBackListenerFragmentDefault implements OnSwipeBackListener {
 
     @Override
     public void finish() {
-        delegate.getFragment().getActivity().getSupportFragmentManager().popBackStackImmediate();
+        FragmentActivity activity = delegate.getFragment().getActivity();
+        if (activity != null) {
+            activity.getSupportFragmentManager().popBackStackImmediate();
+        }
     }
 }

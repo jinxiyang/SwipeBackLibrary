@@ -3,9 +3,9 @@ package com.yang.swipeback.listener;
 import android.app.Activity;
 import android.view.View;
 
-import com.yang.swipeback.util.ActivityStack;
 import com.yang.swipeback.delegate.ActivitySwipeBackDelegate;
 import com.yang.swipeback.delegate.SwipeBackDelegate;
+import com.yang.swipeback.util.ActivityStack;
 import com.yang.swipeback.util.TranslucentActivityUtils;
 
 /**
@@ -25,7 +25,7 @@ public class OnSwipeBackListenerActivityDefault implements OnSwipeBackListener {
     @Override
     public View findPreviousView() {
         Activity backActivity = ActivityStack.getInstance().getPreviousActivity();
-        if (backActivity != null){
+        if (backActivity != null && backActivity != delegate.getActivity()){
             return backActivity.getWindow().getDecorView();
         }
         return null;
@@ -43,6 +43,10 @@ public class OnSwipeBackListenerActivityDefault implements OnSwipeBackListener {
 
     @Override
     public void finish() {
+        Activity backActivity = ActivityStack.getInstance().getPreviousActivity();
+        if (backActivity instanceof OnSwipeBackCompletedListener){
+            ((OnSwipeBackCompletedListener) backActivity).onBack();
+        }
         delegate.getActivity().finish();
         delegate.getActivity().overridePendingTransition(0, 0);
     }
