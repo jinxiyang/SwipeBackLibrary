@@ -1,4 +1,4 @@
-package com.yang.swipeback;
+package com.yang.swipeback.layout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import com.yang.swipeback.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,7 +174,7 @@ public class SwipeBackLayout extends FrameLayout {
      *
      * @param view
      */
-    protected void setContentView(View view) {
+    public void setContentView(View view) {
         mContentView = view;
     }
 
@@ -292,8 +294,10 @@ public class SwipeBackLayout extends FrameLayout {
         /**
          * Invoke when scrolling
          *
-         * @param edgeFlag flag to describe edge
-         * @param scrollPercent scroll percent of this view
+         * @param left        New X coordinate of the left edge of the view
+         * @param top         New Y coordinate of the top edge of the view
+         * @param dx          Change in X position from the last call
+         * @param dy          Change in Y position from the last call
          */
         void onScroll(int edgeFlag, int left, int top, int dx, int dy, float scrollPercent);
     }

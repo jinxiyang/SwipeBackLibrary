@@ -3,8 +3,7 @@ package com.yang.swipebacklibrary.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.yang.swipeback.SwipeBackActivity;
+import android.view.MotionEvent;
 
 /**
  * Created by yang on 2018/3/26.
@@ -72,5 +71,12 @@ public class BaseActivity extends SwipeBackActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Log.i(TAG, "onRestoreInstanceState: ");
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        Log.i(TAG, "dispatchTouchEvent: " + ev.getAction());
+        return super.dispatchTouchEvent(ev);
     }
 }

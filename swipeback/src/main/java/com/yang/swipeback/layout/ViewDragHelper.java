@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yang.swipeback;
+package com.yang.swipeback.layout;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

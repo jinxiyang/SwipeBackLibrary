@@ -1,10 +1,14 @@
-package com.yang.swipeback;
+package com.yang.swipebacklibrary.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+
+import com.yang.swipeback.util.ActivityStack;
+import com.yang.swipeback.delegate.ActivitySwipeBackDelegate;
 
 /**
  * Created by yang on 2018/3/26.
@@ -26,14 +30,26 @@ public class SwipeBackActivity extends AppCompatActivity{
         swipeBackDelegate.onPostCreate();
     }
 
+    @Override
+    protected void onDestroy() {
+        swipeBackDelegate.onDestroy();
+        super.onDestroy();
+    }
+
     public ActivitySwipeBackDelegate getActivitySwipeBackDelegate() {
         return swipeBackDelegate;
+    }
+
+    public void setSwipeBackEnable(boolean enable) {
+        if (swipeBackDelegate != null){
+            swipeBackDelegate.setSwipeBackEnable(enable);
+        }
     }
 
 
 
     public void loadFragment(Fragment fragment){
-        getSupportFragmentManager().addOnBackStackChangedListener(swipeBackDelegate.getBackStackChangedListenerDefault());
+        getSupportFragmentManager().addOnBackStackChangedListener(backStackChangedListenerDefault);
         //第一个fragment没有入栈，当只有一个fragment时按返回键不会显示空白，直接activity.finishi()
         getSupportFragmentManager()
                 .beginTransaction()
@@ -61,4 +77,16 @@ public class SwipeBackActivity extends AppCompatActivity{
     public int getContextViewId() {
         return 0;
     }
+
+
+    private FragmentManager.OnBackStackChangedListener backStackChangedListenerDefault = new FragmentManager.OnBackStackChangedListener() {
+        @Override
+        public void onBackStackChanged() {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {//最多有一个通过loadFragment加载的fragment, 可能要禁止或者放开
+                setSwipeBackEnable(ActivityStack.getInstance().count() > 0);
+            } else {//返回栈中不只一个fragment，禁止activity的滑动返回功能
+                setSwipeBackEnable(false);
+            }
+        }
+    };
 }

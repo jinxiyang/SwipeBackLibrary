@@ -1,4 +1,4 @@
-package com.yang.swipeback;
+package com.yang.swipeback.util;
 
 import android.app.Activity;
 import android.app.Application;
@@ -27,15 +27,8 @@ public class ActivityStack implements Application.ActivityLifecycleCallbacks {
         return activities.size();
     }
 
-    public Activity getTopActivity() {
-        if (activities.size() > 0) {
-            return activities.get(activities.size() - 1);
-        } else {
-            return null;
-        }
-    }
 
-    public Activity getBackActivity() {
+    public Activity getPreviousActivity() {
         if (activities.size() > 1) {
             return activities.get(activities.size() - 2);
         } else {
@@ -79,7 +72,7 @@ public class ActivityStack implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        activities.remove(activity);
+
     }
 
 

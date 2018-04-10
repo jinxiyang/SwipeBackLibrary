@@ -1,4 +1,4 @@
-package com.yang.swipeback;
+package com.yang.swipebacklibrary.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+
+import com.yang.swipeback.delegate.FragmentSwipeBackDelegate;
+import com.yang.swipebacklibrary.R;
 
 /**
  * Author: 杨进玺
@@ -32,18 +35,17 @@ public abstract class SwipeBackFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        swipeBackDelegate.setSwipeBackEnable(true);
-    }
-
-    @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         return swipeBackDelegate.onCreateAnimation();
     }
 
-    public abstract View onCreateView(LayoutInflater inflater, @Nullable Bundle savedInstanceState);
+    @Override
+    public void onDestroy() {
+        swipeBackDelegate.onDestroy();
+        super.onDestroy();
+    }
 
+    public abstract View onCreateView(LayoutInflater inflater, @Nullable Bundle savedInstanceState);
 
 
 

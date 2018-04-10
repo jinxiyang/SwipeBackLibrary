@@ -1,18 +1,14 @@
-package com.yang.swipeback;
+package com.yang.swipeback.util;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 
 import java.lang.reflect.Method;
 
-/**
- * Created by Chaojun Wang on 6/9/14.
- */
-public class Utils {
+public class TranslucentActivityUtils {
     /**
      * Convert a translucent themed Activity
      * {@link android.R.attr#windowIsTranslucent} to a fullscreen opaque
@@ -102,10 +98,5 @@ public class Utils {
         } catch (Throwable ignore) {
             ignore.printStackTrace();
         }
-    }
-
-
-    public static void clearFragmentAnim(Fragment fragment){
-
     }
 }

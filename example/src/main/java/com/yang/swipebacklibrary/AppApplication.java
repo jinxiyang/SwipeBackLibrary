@@ -2,14 +2,10 @@ package com.yang.swipebacklibrary;
 
 import android.app.Application;
 
-import com.yang.swipeback.ActivityStack;
 import com.yang.swipeback.SwipeBackManager;
 
 public class AppApplication extends Application {
     public static AppApplication instance;
-
-    //这是库中提供的activity栈,放到Application中,不会被GC
-    public ActivityStack stack;
 
     @Override
     public void onCreate() {
@@ -17,7 +13,6 @@ public class AppApplication extends Application {
         instance = this;
 
         SwipeBackManager.init(this);
-        SwipeBackManager.setDebug(true);
     }
 
 
